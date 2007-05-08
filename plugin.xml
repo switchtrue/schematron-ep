@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="schematronBuilder"
+         name="Schematron Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="net.sourceforge.schematronep.builder.SchematronBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="schematronNature"
+         name="Schematron Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="net.sourceforge.schematronep.builder.SchematronNature">
+         </run>
+      </runtime>
+      <builder
+            id="net.sourceforge.schematronep.schematronBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            nameFilter="*"
+            id="net.sourceforge.schematronep.contribution1">
+         <action
+               label="Add/Remove Schematron Validation"
+               class="net.sourceforge.schematronep.builder.ToggleNatureAction"
+               menubarPath="additions"
+               enablesFor="+"
+               id="net.sourceforge.schematronep.addRemoveNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="net.sourceforge.schematronep.preferences.MainPreferencePage"
+            id="net.sourceforge.schematron-ep.MainPreferencePage"
+            name="Schematron"/>
+   </extension>
+   <extension
+         id="schContentType"
+         name="Schematron Content Type"
+         point="org.eclipse.core.runtime.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            default-charset="UTF-8"
+            describer="org.eclipse.core.internal.content.XMLContentDescriber"
+            file-extensions="sch"
+            id="net.sourceforge.schematron-ep.schematron-content-type"
+            name="Schematron"
+            priority="normal"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.contentTypes">
+      <file-association
+            content-type="org.eclipse.core.runtime.xml"
+            file-extensions="sch"/>
+   </extension>
+
+</plugin>
