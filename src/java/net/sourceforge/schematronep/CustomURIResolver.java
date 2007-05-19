@@ -9,6 +9,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
+import net.sourceforge.schematronep.builder.SchematronBuilder;
 
 import org.eclipse.core.resources.IFile;
 
@@ -29,6 +30,12 @@ public class CustomURIResolver implements URIResolver
 	
 	public Source resolve(String path, String arg1) throws TransformerException
 	{
+		if (SchematronBuilder.getSkeletonFileName().equals(path))
+		{
+			ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
+
+			return new StreamSource(loader.getResourceAsStream("net/sourceforge/schematronep/xsl/" + path));
+		}
 		File f = resolve(path);
 		
 		if (f != null)
