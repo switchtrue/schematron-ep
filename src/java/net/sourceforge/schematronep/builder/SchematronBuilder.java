@@ -249,15 +249,16 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 				String sch = d.substring(d.indexOf("=\"") + 2, d.lastIndexOf("\""));
 				Log.debug("Schema = " + sch);
 
-				IFile schemaFile = Utils.convert(resolver.resolve(sch));
-
-				if (schemaFile.exists() == false)
+				File f = resolver.resolve(sch);
+				
+				if (f == null || f.exists() == false)
 				{
-					this.addMarker(file, "Schema " + schemaFile.getLocation() + " does not exist", 1,
+					this.addMarker(file, "Schema " + sch + " does not exist", 1,
 									IMarker.SEVERITY_ERROR);
 				}
 				else
 				{
+					IFile schemaFile = Utils.convert(f);
 					schemaList.add(schemaFile.getLocation().toString());
 				}
 			}
