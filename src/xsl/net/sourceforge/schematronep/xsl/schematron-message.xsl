@@ -4,7 +4,8 @@
 <xsl:stylesheet
    version="1.0"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-   xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias">
+   xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias"
+   xmlns:saxon="http://saxon.sf.net/">
 
 <xsl:import href="iso_schematron_skeleton.xsl"/>
 
@@ -28,6 +29,7 @@
 		<xsl:call-template name="process-message">
 			<xsl:with-param name="pattern" select="$test"/>
 			<xsl:with-param name="role" select="$role"/>
+			<xsl:with-param name="diagnostics" select="$diagnostics"/>
 			<xsl:with-param name="type" select="'REPORT'"/>
 		</xsl:call-template>
 	</xsl:template>
@@ -53,6 +55,7 @@
 		<xsl:call-template name="process-message">
 			<xsl:with-param name="pattern" select="$test"/>
 			<xsl:with-param name="role" select="$role"/>
+			<xsl:with-param name="diagnostics" select="$diagnostics"/>
 			<xsl:with-param name="type" select="'ASSERT'"/>
 		</xsl:call-template>
 		
@@ -63,9 +66,13 @@
 
 	<xsl:template name="process-message">
 		<xsl:param name="pattern" />
-            <xsl:param name="role" />
+        <xsl:param name="role" />
+		<xsl:param name="diagnostics" />
 		<xsl:param name="type" select="'none'"/>
-		<axsl:value-of  select="string('&#10;@@@')"/><axsl:value-of select="saxon:line-number(current())"/>:<xsl:value-of select="$type"/>:<xsl:apply-templates mode="text"/>	
+		<xsl:variable name="text">
+			<xsl:apply-templates mode="text"/>
+		</xsl:variable> 
+		<axsl:value-of  select="string('&#10;@@@')"/><axsl:value-of select="saxon:line-number(current())"/>:<xsl:value-of select="$type"/>:<xsl:value-of select="saxon:line-number(.)"/>:<xsl:value-of select="normalize-space($text)"/>	
 		 <xsl:if test=" $message-newline = 'true'" >
 			<axsl:value-of  select="string('&#10;')"/>
 		</xsl:if>
