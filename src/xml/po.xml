@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?schematron-schema href="../sch/po.sch"?>
+
+<po:po xmlns:po="http://schematron-ep.sf.net/example/po" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://schematron-ep.sf.net/example/po ../xsd/po.xsd ">
+  
+  <po:line productId="apple" qty="2" cost="0.68"/> 
+  <po:line productId="apple" qty="3" cost="1.02"/>
+  <po:total>1.70</po:total>
+</po:po>
