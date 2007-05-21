@@ -59,13 +59,11 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 	/** The URI resolver to allow custom file system lookups */
 	private CustomURIResolver resolver = null;
 
+	/** The extension for xml files */
 	public static final String EXT_XML = "xml";
 
+	/** The extension for schematron files */
 	public static final String EXT_SCH = "sch";
-
-	public static final String PATH_SKELETON_1_5 = "net/sourceforge/schematronep/xsl/skeleton1-5.xsl";
-
-	public static final String PATH_SKELETON_ISO = "net/sourceforge/schematronep/xsl/iso_schematron_skeleton.xsl";
 
 	public static final String FILE_NAME_SKELETON = "iso_schematron_skeleton.xsl";
 
@@ -87,6 +85,8 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 
 	private TemplatesManager templatesMgr = null;
 
+	private SchematronValidationErrorListener errorListener = new SchematronValidationErrorListener();
+	
 	private URL schematronXslURL = null;
 
 	/**
@@ -101,6 +101,7 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 		// Suppress the "Running an XSLT 1.0 stylesheet with an XSLT 2.0
         // processor" messages
 		config.setVersionWarning(false);
+		config.setErrorListener(errorListener);
 
 		txFac = new TransformerFactoryImpl(config);
 		resolver = new CustomURIResolver(txFac.getURIResolver(), null);
@@ -110,8 +111,6 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 
 		ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
 
-		// schematronXslURL = loader.getResource(PATH_SKELETON_1_5);
-		// schematronXslURL = loader.getResource(PATH_SKELETON_ISO);
 		schematronXslURL = loader.getResource(PATH_ECLIPSE_WRAPPER);
 	}
 
@@ -289,7 +288,7 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 		resolver.setBase(file);
 		try
 		{
-
+			errorListener.setFile(file);
 			Set assocSchematronFiles = extractSchemasFromPIs(file);
 			xmlFileMap.put(file.getLocation(), assocSchematronFiles);
 			
@@ -405,10 +404,11 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 				StringTokenizer st = new StringTokenizer(line.substring(RECORD_IDENTIFIER.length()), FIELD_DELIMITER);
 				int lineNumber = Integer.parseInt(st.nextToken());
 				String type = st.nextToken();
+				String schemaLineNo = st.nextToken();
 				String message = line.substring(line.lastIndexOf(FIELD_DELIMITER) + 1);
 				int level = (MESSAGE_TYPE_ASSERT.equals(type) ? IMarker.SEVERITY_ERROR : IMarker.SEVERITY_INFO);
 				
-				addMarker(file, message + " (see schema " + schemaFile.getAbsolutePath() + ")", lineNumber, level);
+				addMarker(file, message + " (see line " + schemaLineNo + " in schema " + schemaFile.getAbsolutePath() + ")", lineNumber, level);
 			}
 			line = reader.readLine();
 		}
@@ -419,7 +419,12 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 	{
 		IFile file = null;
 
-		SchematronValidationErrorListener(IFile aFile)
+		SchematronValidationErrorListener()
+		{
+			
+		}
+		
+		public void setFile(IFile aFile)
 		{
 			file = aFile;
 		}
