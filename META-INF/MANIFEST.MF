@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: SchematronEP Plug-in
+Bundle-Name: Schematron Eclipse Plug-in
 Bundle-SymbolicName: net.sourceforge.schematronep; singleton:=true
-Bundle-Version: 0.1
+Bundle-Version: 1.0.0
 Bundle-Activator: net.sourceforge.schematronep.SchematronPlugin
 Bundle-Vendor: Dave Hallam
 Bundle-Localization: plugin
