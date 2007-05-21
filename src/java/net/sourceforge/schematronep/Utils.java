@@ -1,13 +1,19 @@
 package net.sourceforge.schematronep;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.w3c.dom.Node;
 
-public class Utils
+public final class Utils
 {
 	public static File convert(IFile file)
 	{
@@ -23,5 +29,21 @@ public class Utils
 	public static boolean getBooleanPreference(String key)
 	{
 		return SchematronPlugin.getDefault().getPreferenceStore().getBoolean(key);
+	}
+	
+	public static void dump(Node node)
+	{
+		try
+		{
+			TransformerFactory fac = TransformerFactory.newInstance();
+			Transformer t = fac.newTransformer();
+			FileOutputStream fos = new FileOutputStream(new File("xsl.xsl"));
+			t.transform(new DOMSource(node), new StreamResult(fos));
+			fos.close();	
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
