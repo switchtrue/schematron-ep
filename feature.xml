@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="net.sourceforge.schematron-ep.feature"
+      id="net.sourceforge.schematronep.feature"
       label="Schematron Eclipse Plugin Feature"
       version="0.1.0">
 
@@ -466,7 +466,7 @@ EXHIBIT A.
    </license>
 
    <plugin
-         id="net.sourceforge.schematron-ep"
+         id="net.sourceforge.schematronep"
          download-size="0"
          install-size="0"
          version="0.0.0"
