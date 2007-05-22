@@ -3,7 +3,7 @@
    <description url="https://www.castledesigns.co.uk/schematron-ep/">
       Schematron Eclipse Plugin Update Site
    </description>
-   <feature url="features/net.sourceforge.schematron-ep.feature_0.1.0.jar" id="net.sourceforge.schematron-ep.feature" version="0.1.0">
+   <feature url="features/net.sourceforge.schematronep.feature_0.1.0.jar" id="net.sourceforge.schematronep.feature" version="0.1.0">
       <category name="Schematron Eclipse Plugin"/>
    </feature>
    <category-def name="Schematron Eclipse Plugin" label="Schematron Eclipse Plugin"/>
