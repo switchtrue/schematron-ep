@@ -50,6 +50,7 @@ public class SchematronEditor extends MultiPageEditorPart implements IResourceCh
 	public SchematronEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		
 	}
 	/**
 	 * Creates page 0 of the multi-page editor,
@@ -133,6 +134,7 @@ public class SchematronEditor extends MultiPageEditorPart implements IResourceCh
 		if (!(editorInput instanceof IFileEditorInput))
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
 		super.init(site, editorInput);
+		this.setTitle(editorInput.getName());
 	}
 	/* (non-Javadoc)
 	 * Method declared on IEditorPart.
