@@ -58,6 +58,8 @@ public class TemplatesManager
 		if (retVal == null)
 		{
 			Transformer t = templates.newTransformer();
+			t.setParameter("allow-foreign", "true");
+			
 			DOMResult result = new DOMResult();
 			t.transform(new StreamSource(new FileInputStream(xmlFile)), result);
 
