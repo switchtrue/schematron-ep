@@ -79,5 +79,28 @@
             content-type="org.eclipse.core.runtime.xml"
             file-extensions="sch"/>
    </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true"/>
+      <toc file="tocconcepts.xml"/>
+      <toc file="tocgettingstarted.xml"/>
+      <toc file="tocreference.xml"/>
+      <toc file="tocsamples.xml"/>
+      <toc file="toctasks.xml"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="net.sourceforge.schematronep.editors.SchematronEditor"
+            contributorClass="net.sourceforge.schematronep.editors.SchematronEditorContributor"
+            extensions="sch"
+            icon="icons/bilby_16x16.gif"
+            id="net.sourceforge.schematronep.editors.SchematronEditor"
+            name="Schematron Editor"/>
+   </extension>
+   
+	  
 
 </plugin>
