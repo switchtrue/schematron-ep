@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -88,6 +90,17 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 	private SchematronValidationErrorListener errorListener = new SchematronValidationErrorListener();
 	
 	private URL schematronXslURL = null;
+	
+	public static TransformerFactory createTransformerFactory()
+	{
+		Configuration config = new Configuration();
+		config.setLineNumbering(true);
+		// Suppress the "Running an XSLT 1.0 stylesheet with an XSLT 2.0
+        // processor" messages
+		config.setVersionWarning(false);
+
+		return  new TransformerFactoryImpl(config);
+	}
 
 	/**
      * Initialise the transformationFactory with a config so that we can turn
@@ -96,22 +109,22 @@ public class SchematronBuilder extends IncrementalProjectBuilder
      */
 	public SchematronBuilder()
 	{
-		Configuration config = new Configuration();
-		config.setLineNumbering(true);
-		// Suppress the "Running an XSLT 1.0 stylesheet with an XSLT 2.0
-        // processor" messages
-		config.setVersionWarning(false);
-		config.setErrorListener(errorListener);
 
-		txFac = new TransformerFactoryImpl(config);
+		//config.setErrorListener(errorListener);
+		txFac = createTransformerFactory();
 		resolver = new CustomURIResolver(txFac.getURIResolver(), null);
 		txFac.setURIResolver(resolver);
 
 		templatesMgr = new TemplatesManager(txFac);
 
+		schematronXslURL = getSchematronXslURL();
+	}
+	
+	public static URL getSchematronXslURL()
+	{
 		ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
-
-		schematronXslURL = loader.getResource(PATH_ECLIPSE_WRAPPER);
+		
+		return loader.getResource(PATH_ECLIPSE_WRAPPER);
 	}
 
 	public static String getSkeletonFileName()
@@ -327,6 +340,36 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 		}
 	}
 
+	public static String compileSchematronSchema(String data) throws Exception
+	{
+		TransformerFactory fac = createTransformerFactory();
+		URIResolver resolver = new CustomURIResolver(fac.getURIResolver(), null);
+		fac.setURIResolver(resolver);
+		
+		InputStream is = null;
+		try
+		{
+			URL schematronXslURL = getSchematronXslURL();
+			is = schematronXslURL.openStream();
+			Transformer t = fac.newTransformer(new StreamSource(is));
+			t.setParameter("allow-foreign", "true");
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			StreamResult result = new StreamResult(baos);
+			t.transform(new StreamSource(new ByteArrayInputStream(data.getBytes())), result);
+			return baos.toString();
+		}
+		finally
+		{
+			if (is != null)
+			{
+				is.close();
+			}
+		}
+		
+		
+	
+	}
+	
 	/**
 	 * 
 	 * @param file
