@@ -8,7 +8,11 @@ Bundle-Vendor: Dave Hallam
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.wst.sse.ui,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.ide,
+ org.eclipse.jface.text
 Eclipse-LazyStart: true
 Bundle-ClassPath: lib/saxon8.jar,
  lib/saxon8-dom.jar,
