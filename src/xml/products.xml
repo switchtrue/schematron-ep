@@ -1,0 +1,5 @@
+<products>
+	<product id="milk" price="0.89"/>
+	<product id="rice" price="1.23"/>
+	<product id="apple" price="0.34"/>
+</products>

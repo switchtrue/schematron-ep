@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://schematron-ep.sf.net/example/po" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:po="http://schematron-ep.sf.net/example/po">
+
+
+
+    <complexType name="lineType">
+    	<attribute name="productId" type="string" use="required"></attribute>
+    	<attribute name="qty" type="int" use="required"></attribute>
+		<attribute name="cost" type="float" use="required"></attribute>
+    </complexType>
+
+    <simpleType name="totalType"></simpleType>
+
+    <complexType name="poType">
+    	<sequence>
+    		<element name="line" type="po:lineType" maxOccurs="unbounded" minOccurs="1"></element>
+    		<element name="total" type="po:totalType"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="po" type="po:poType"></element>
+</schema>
