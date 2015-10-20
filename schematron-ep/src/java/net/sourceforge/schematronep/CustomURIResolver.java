@@ -32,8 +32,8 @@ public class CustomURIResolver implements URIResolver
 	{
 		if (SchematronBuilder.getSkeletonFileName().equals(path))
 		{
-			ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
-
+			//ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
+			ClassLoader loader = SchematronPlugin.getDefault().getClass().getClassLoader();
 			return new StreamSource(loader.getResourceAsStream("net/sourceforge/schematronep/xsl/" + path));
 		}
 		File f = resolve(path);

@@ -134,7 +134,7 @@ public class SchematronEditor extends MultiPageEditorPart implements IResourceCh
 		if (!(editorInput instanceof IFileEditorInput))
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
 		super.init(site, editorInput);
-		this.setTitle(editorInput.getName());
+		//this.(editorInput.getName());
 	}
 	/* (non-Javadoc)
 	 * Method declared on IEditorPart.
