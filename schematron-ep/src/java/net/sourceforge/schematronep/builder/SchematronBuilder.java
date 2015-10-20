@@ -83,7 +83,7 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 
 	public static final String MESSAGE_TYPE_REPORT = "REPORT";
 
-	private Map xmlFileMap = new HashMap();
+	private Map<IPath, Set<String>> xmlFileMap = new HashMap<IPath, Set<String>>();
 
 	private TemplatesManager templatesMgr = null;
 
@@ -122,7 +122,7 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 	
 	public static URL getSchematronXslURL()
 	{
-		ClassLoader loader = SchematronPlugin.getDefault().getDescriptor().getPluginClassLoader();
+		ClassLoader loader = SchematronPlugin.getDefault().getClass().getClassLoader();
 		
 		return loader.getResource(PATH_ECLIPSE_WRAPPER);
 	}
@@ -195,7 +195,7 @@ public class SchematronBuilder extends IncrementalProjectBuilder
      * @see org.eclipse.core.internal.events.InternalBuilder#build(int,
      *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
      */
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException
+	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException
 	{
 		if (kind == FULL_BUILD)
 		{
@@ -241,9 +241,9 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 	 * @return
 	 * @throws Exception
 	 */
-	private Set extractSchemasFromPIs(IFile file) throws Exception
+	private Set<String> extractSchemasFromPIs(IFile file) throws Exception
 	{
-		Set schemaList = new HashSet();
+		Set<String> schemaList = new HashSet<String>();
 
 		Document doc = createDocument(file);
 		NodeList list = doc.getChildNodes();
@@ -303,14 +303,14 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 		try
 		{
 			errorListener.setFile(file);
-			Set assocSchematronFiles = extractSchemasFromPIs(file);
+			Set<String> assocSchematronFiles = extractSchemasFromPIs(file);
 			xmlFileMap.put(file.getLocation(), assocSchematronFiles);
 			
-			Iterator it = assocSchematronFiles.iterator();
+			Iterator<String> it = assocSchematronFiles.iterator();
 
 			while (it.hasNext())
 			{
-				String schFileName = (String) it.next();
+				String schFileName = it.next();
 
 				File schemaFile = new File(schFileName);
 
@@ -389,13 +389,13 @@ public class SchematronBuilder extends IncrementalProjectBuilder
 		templatesMgr.removeTemplates(file);
 
 		// Get the location of this file and hunt through the
-		Set keys = xmlFileMap.keySet();
-		Iterator it = keys.iterator();
+		Set<IPath> keys = xmlFileMap.keySet();
+		Iterator<IPath> it = keys.iterator();
 		while (it.hasNext())
 		{
-			IPath key = (IPath) it.next();
+			IPath key = it.next();
 
-			Set schSet = (Set) xmlFileMap.get(key);
+			Set<String> schSet = xmlFileMap.get(key);
 			if (schSet.contains(location))
 			{
 				// Call processXML with the correct path

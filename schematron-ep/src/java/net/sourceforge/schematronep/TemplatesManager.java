@@ -17,12 +17,11 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
-
 import org.eclipse.core.resources.IFile;
 
 public class TemplatesManager
 {
-	private Map templatesMap = new HashMap();
+	private Map<String, Templates> templatesMap = new HashMap<String, Templates>();
 
 	private TransformerFactory factory = null;
 
